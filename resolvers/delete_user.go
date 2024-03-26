@@ -8,14 +8,14 @@ import (
 	"github.com/natnad59/aws-rest-api/models"
 )
 
-func GetUser(c *gin.Context) {
+func DeleteUser(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
 		c.IndentedJSON(http.StatusBadRequest, models.User{})
 		return
 	}
 
-	userOut, err := client.GetUser(id)
+	userOut, err := client.DeleteUser(id)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, models.User{})
 	}

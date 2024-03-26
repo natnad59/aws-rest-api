@@ -8,14 +8,14 @@ import (
 	"github.com/natnad59/aws-rest-api/models"
 )
 
-func GetUser(c *gin.Context) {
-	id := c.Param("id")
-	if id == "" {
+func PostUser(c *gin.Context) {
+	var user models.User
+
+	if err := c.BindJSON(&user); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, models.User{})
-		return
 	}
 
-	userOut, err := client.GetUser(id)
+	userOut, err := client.PostUser(user)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, models.User{})
 	}

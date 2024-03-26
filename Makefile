@@ -13,8 +13,12 @@ push:
 
 apply:
 	cd terraform && \
+	terraform init && \
+	terraform workspace select dev || terraform workspace new dev && \
 	terraform apply -auto-approve
 
 destroy:
 	cd terraform && \
+	terraform init && \
+	terraform workspace select dev || terraform workspace new dev && \
 	terraform destroy -auto-approve
