@@ -1,24 +1,24 @@
 package resolvers
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/natnad59/aws-rest-api/client"
-	"github.com/natnad59/aws-rest-api/models"
 )
 
 func GetUser(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
-		c.IndentedJSON(http.StatusBadRequest, models.User{})
+		c.String(http.StatusBadRequest, errors.New("please provide id path parameter").Error())
 		return
 	}
 
 	userOut, err := client.GetUser(id)
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, models.User{})
+		c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	c.IndentedJSON(http.StatusOK, userOut)
+	c.JSON(http.StatusOK, userOut)
 }

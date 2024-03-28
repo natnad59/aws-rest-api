@@ -12,13 +12,13 @@ func PostUser(c *gin.Context) {
 	var user models.User
 
 	if err := c.BindJSON(&user); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, models.User{})
+		c.String(http.StatusBadRequest, err.Error())
 	}
 
 	userOut, err := client.PostUser(user)
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, models.User{})
+		c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	c.IndentedJSON(http.StatusOK, userOut)
+	c.JSON(http.StatusOK, userOut)
 }

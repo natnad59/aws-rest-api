@@ -4,7 +4,7 @@ resource "aws_lambda_function" "_" {
   s3_bucket     = "backend-dev-artifacts"
   s3_key        = "examples/rest-api-example.zip"
   runtime       = "provided.al2023"
-  handler       = "api"
+  handler       = "bootstrap"
 }
 
 resource "aws_iam_role" "_" {
@@ -35,6 +35,7 @@ resource "aws_iam_role" "_" {
             Effect = "Allow"
             Action = [
               "dynamodb:GetItem",
+              "dynamodb:Scan",
               "dynamodb:PutItem",
               "dynamodb:UpdateItem",
               "dynamodb:DeleteItem"
@@ -48,4 +49,92 @@ resource "aws_iam_role" "_" {
       }
     )
   }
+}
+
+resource "aws_lambda_permission" "_" {
+  statement_id = "AllowExecutionFromAPIGateway"
+  action = "lambda:InvokeFunction"
+  function_name = aws_lambda_function._.function_name
+  principal = "apigateway.amazonaws.com"
+  source_arn = "${aws_api_gateway_rest_api._.execution_arn}/*/*"
+}
+
+resource "aws_api_gateway_resource" "user_api" {
+  rest_api_id = aws_api_gateway_rest_api._.id
+  parent_id = aws_api_gateway_rest_api._.root_resource_id
+  path_part = "users"
+}
+
+resource "aws_api_gateway_resource" "user_api_id" {
+  rest_api_id = aws_api_gateway_rest_api._.id
+  parent_id = aws_api_gateway_resource.user_api.id
+  path_part = "{id}"
+}
+
+// GET /users/{id}
+resource "aws_api_gateway_method" "get_user" {
+  rest_api_id = aws_api_gateway_rest_api._.id
+  resource_id = aws_api_gateway_resource.user_api_id.id
+  http_method = "GET"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "get_user" {
+  rest_api_id = aws_api_gateway_rest_api._.id
+  resource_id = aws_api_gateway_resource.user_api_id.id
+  http_method = aws_api_gateway_method.get_user.http_method
+  type = "AWS_PROXY"
+  integration_http_method = "POST"
+  uri = aws_lambda_function._.invoke_arn
+}
+
+// DELETE /users/{id}
+resource "aws_api_gateway_method" "delete_user" {
+  rest_api_id = aws_api_gateway_rest_api._.id
+  resource_id = aws_api_gateway_resource.user_api_id.id
+  http_method = "DELETE"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "delete_user" {
+  rest_api_id = aws_api_gateway_rest_api._.id
+  resource_id = aws_api_gateway_resource.user_api_id.id
+  http_method = aws_api_gateway_method.delete_user.http_method
+  type = "AWS_PROXY"
+  integration_http_method = "POST"
+  uri = aws_lambda_function._.invoke_arn
+}
+
+// GET /users
+resource "aws_api_gateway_method" "get_users" {
+  rest_api_id = aws_api_gateway_rest_api._.id
+  resource_id = aws_api_gateway_resource.user_api.id
+  http_method = "GET"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "get_users" {
+  rest_api_id = aws_api_gateway_rest_api._.id
+  resource_id = aws_api_gateway_resource.user_api.id
+  http_method = aws_api_gateway_method.get_users.http_method
+  type = "AWS_PROXY"
+  integration_http_method = "POST"
+  uri = aws_lambda_function._.invoke_arn
+}
+
+// POST /users
+resource "aws_api_gateway_method" "post_users" {
+  rest_api_id = aws_api_gateway_rest_api._.id
+  resource_id = aws_api_gateway_resource.user_api.id
+  http_method = "POST"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "post_user" {
+  rest_api_id = aws_api_gateway_rest_api._.id
+  resource_id = aws_api_gateway_resource.user_api.id
+  http_method = aws_api_gateway_method.post_users.http_method
+  type = "AWS_PROXY"
+  integration_http_method = "POST"
+  uri = aws_lambda_function._.invoke_arn
 }

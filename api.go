@@ -19,10 +19,10 @@ func init() {
 
 	gin.SetMode(gin.ReleaseMode)
 
-	router.GET("/api/user/:id", resolvers.GetUser)
-	router.GET("/api/users", resolvers.GetUsers)
-	router.POST("/api/user", resolvers.PostUser)
-	router.DELETE("/api/user/:id", resolvers.DeleteUser)
+	router.GET("/users/:id", resolvers.GetUser)
+	router.GET("/users", resolvers.GetUsers)
+	router.POST("/users", resolvers.PostUser)
+	router.DELETE("/users/:id", resolvers.DeleteUser)
 
 	ginLambda = ginadapter.New(router)
 }

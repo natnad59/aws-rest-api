@@ -22,3 +22,7 @@ destroy:
 	terraform init && \
 	terraform workspace select dev || terraform workspace new dev && \
 	terraform destroy -auto-approve
+
+deploy:
+	cd scripts && \
+	./deploy.sh
