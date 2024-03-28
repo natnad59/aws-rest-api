@@ -13,7 +13,5 @@ func GetUsers(c *gin.Context) {
 		c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	// js, err := json.Marshal(usersOut)
-	// c.JSON(http.StatusOK, gin.H{"body": string(js)})
 	c.JSON(http.StatusOK, usersOut)
 }

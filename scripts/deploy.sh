@@ -14,7 +14,10 @@ terraform init
 terraform workspace select dev || terraform workspace new dev
 terraform apply -auto-approve
 sleep 5
-aws lambda update-function-code --function-name rest-api-example --s3-bucket backend-dev-artifacts --s3-key examples/rest-api-example.zip
+aws lambda update-function-code \
+    --function-name rest-api-example 
+    --s3-bucket backend-dev-artifacts 
+    --s3-key examples/rest-api-example.zip
 popd
 
 sleep 10

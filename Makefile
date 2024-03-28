@@ -1,8 +1,7 @@
 build:
-	go build -o out/api
+	go build -o lambda/bootstrap
 
 clean:
-	rm -rf out/* && \
 	rm -rf lambda/*
 
 push:
