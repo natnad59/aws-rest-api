@@ -22,4 +22,4 @@ go.work
 
 out/
 lambda/
-*.terraform
+*.terraform*
