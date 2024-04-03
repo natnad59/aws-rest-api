@@ -18,7 +18,7 @@ import (
 func DeleteUser(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
-		c.String(http.StatusBadRequest, errors.New("please provide id path parameter").Error())
+		c.JSON(http.StatusBadRequest, errors.New("please provide id path parameter").Error())
 		return
 	}
 
