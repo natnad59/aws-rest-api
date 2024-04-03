@@ -9,23 +9,26 @@ type User struct {
 }
 
 var SampleUser = User{
-	Id:          "1",
-	Name:        "Sheldon",
-	Catchphrase: "Bazinga",
-	Retired:     false,
+	Id:             "1",
+	Name:           "Sheldon",
+	Catchphrase:    "Bazinga",
+	FavoriteNumber: 2,
+	Retired:        false,
 }
 
 var SampleUsers = []User{
 	{
-		Id:          "1",
-		Name:        "Sheldon",
-		Catchphrase: "Bazinga",
-		Retired:     false,
+		Id:             "1",
+		Name:           "Sheldon",
+		Catchphrase:    "Bazinga",
+		FavoriteNumber: 2,
+		Retired:        false,
 	},
 	{
-		Id:          "2",
-		Name:        "Bob",
-		Catchphrase: "zooweemama",
-		Retired:     true,
+		Id:             "2",
+		Name:           "Bob",
+		Catchphrase:    "zooweemama",
+		FavoriteNumber: 45,
+		Retired:        true,
 	},
 }

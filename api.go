@@ -15,7 +15,6 @@ var ginLambda *ginadapter.GinLambda
 
 func init() {
 	router := gin.Default()
-	// router.Use(utility.CorsMiddleware())
 
 	gin.SetMode(gin.ReleaseMode)
 

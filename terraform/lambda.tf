@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "_" {
   function_name = "rest-api-example"
   role          = aws_iam_role._.arn
-  s3_bucket     = "backend-dev-artifacts"
+  s3_bucket     = data.aws_ssm_parameter.artifacts_bucket.value
   s3_key        = "examples/rest-api-example.zip"
   runtime       = "provided.al2023"
   handler       = "bootstrap"
@@ -37,7 +37,6 @@ resource "aws_iam_role" "_" {
               "dynamodb:GetItem",
               "dynamodb:Scan",
               "dynamodb:PutItem",
-              "dynamodb:UpdateItem",
               "dynamodb:DeleteItem"
             ]
             Resource = [
