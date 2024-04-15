@@ -2,7 +2,7 @@ package resolvers
 
 import (
 	"context"
-	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -18,7 +18,7 @@ import (
 func DeleteUser(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
-		c.JSON(http.StatusBadRequest, errors.New("please provide id path parameter").Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Errorf("please provide id path parameter")})
 		return
 	}
 
