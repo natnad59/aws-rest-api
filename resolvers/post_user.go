@@ -18,13 +18,13 @@ func PostUser(c *gin.Context) {
 	var user models.User
 
 	if err := c.BindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": gin.H{"error": err.Error()}})
 		return
 	}
 
 	client, err := client.NewDynamoDbClient()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": gin.H{"error": err.Error()}})
 		return
 	}
 
@@ -33,7 +33,7 @@ func PostUser(c *gin.Context) {
 
 	userIn, err := attributevalue.MarshalMap(user)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": gin.H{"error": err.Error()}})
 		return
 	}
 
@@ -44,7 +44,7 @@ func PostUser(c *gin.Context) {
 		ReturnValues:        "ALL_NEW",
 	})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": gin.H{"error": err.Error()}})
 		return
 	}
 

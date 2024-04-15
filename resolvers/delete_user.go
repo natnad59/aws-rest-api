@@ -24,7 +24,7 @@ func DeleteUser(c *gin.Context) {
 
 	client, err := client.NewDynamoDbClient()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -36,13 +36,13 @@ func DeleteUser(c *gin.Context) {
 		ReturnValues: "ALL_OLD",
 	})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	var user models.User
 	if err = attributevalue.UnmarshalMap(out.Attributes, &user); err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

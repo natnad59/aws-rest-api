@@ -16,7 +16,7 @@ import (
 func GetUsers(c *gin.Context) {
 	client, err := client.NewDynamoDbClient()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": gin.H{"error": err.Error()}})
 		return
 	}
 
@@ -28,13 +28,13 @@ func GetUsers(c *gin.Context) {
 	for paginator.HasMorePages() {
 		out, err := paginator.NextPage(context.TODO())
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, err.Error())
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
 		var paginatedUsers []models.User
 		if err = attributevalue.UnmarshalListOfMaps(out.Items, &paginatedUsers); err != nil {
-			c.JSON(http.StatusInternalServerError, err.Error())
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
